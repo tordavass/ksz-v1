@@ -73,9 +73,16 @@ export async function approveContract(contractId: string) {
     if (!contract) throw new Error('Contract not found')
 
     // 2. Transition: pending_teacher -> pending_company
+    // Ensure we have a signing token if it was missing (e.g. from seed)
+    const crypto = require('crypto')
+    const finalToken = contract.signing_token || crypto.randomUUID()
+
     const { error } = await supabase
         .from('contracts')
-        .update({ status: 'pending_company' })
+        .update({
+            status: 'pending_company',
+            signing_token: finalToken
+        })
         .eq('id', contractId)
         .eq('status', 'pending_teacher') // Safety check
 
@@ -83,7 +90,7 @@ export async function approveContract(contractId: string) {
 
     // 3. Send Email Invite
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
-    const token = contract.signing_token || ''
+    const token = finalToken
     const inviteLink = `${baseUrl}/sign/${token}`
 
     if (contract.temp_company_email) {

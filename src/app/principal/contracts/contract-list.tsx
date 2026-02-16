@@ -17,6 +17,14 @@ export default function ContractList({ companies }: { companies: CompanyContract
     const [uploading, setUploading] = useState(false)
 
     const [confirmId, setConfirmId] = useState<string | null>(null)
+    const [copiedId, setCopiedId] = useState<string | null>(null)
+
+    const handleCopyLink = (token: string, id: string) => {
+        const link = `${window.location.origin}/sign/${token}`
+        navigator.clipboard.writeText(link)
+        setCopiedId(id)
+        setTimeout(() => setCopiedId(null), 2000)
+    }
 
     const handleManage = (company: CompanyContractStatus) => {
         setSelectedCompany(company)
@@ -115,6 +123,14 @@ export default function ContractList({ companies }: { companies: CompanyContract
                                         <span className="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium bg-purple-100 text-purple-800 animate-pulse">
                                             Véglegesítésre Vár
                                         </span>
+                                    ) : company.contract?.status === 'pending_company' ? (
+                                        <span className="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium bg-yellow-100 text-yellow-800">
+                                            Aláírásra Vár (Cég)
+                                        </span>
+                                    ) : company.contract?.status === 'pending_teacher' ? (
+                                        <span className="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium bg-blue-100 text-blue-800">
+                                            Tanári Jóváhagyásra Vár
+                                        </span>
                                     ) : (
                                         <span className="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium bg-gray-100 text-gray-600">
                                             Nincs Szerződés
@@ -147,6 +163,16 @@ export default function ContractList({ companies }: { companies: CompanyContract
                                             className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded text-xs font-bold shadow-sm"
                                         >
                                             ✍️ Véglegesítés & Aláírás
+                                        </button>
+                                    ) : company.contract?.status === 'pending_company' && company.contract.signing_token ? (
+                                        <button
+                                            onClick={() => handleCopyLink(company.contract!.signing_token!, company.contract!.id)}
+                                            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded text-xs font-bold transition-all border ${copiedId === company.contract.id
+                                                ? 'bg-green-50 text-green-700 border-green-200'
+                                                : 'bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100'
+                                                }`}
+                                        >
+                                            {copiedId === company.contract.id ? '✅ Másolva!' : '🔗 Link Másolása'}
                                         </button>
                                     ) : (
                                         <button

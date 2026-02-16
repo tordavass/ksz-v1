@@ -38,11 +38,12 @@ export type CompanyContractStatus = {
         end_date: string | null
         file_url: string | null
         is_active: boolean
-        status: 'pending_company' | 'pending_principal' | 'active' | 'rejected'
+        status: 'pending_teacher' | 'pending_company' | 'pending_principal' | 'active' | 'rejected'
         temp_company_name?: string
         temp_owner_name?: string
         temp_address?: string
         signer_name?: string
+        signing_token?: string
         initiator?: {
             full_name: string
             class_id: string
@@ -66,7 +67,7 @@ export async function getCompaniesWithContracts(): Promise<CompanyContractStatus
     const { data: contracts, error: contractError } = await supabase
         .from('contracts')
         .select('*, initiator:initiator_student_id(full_name, class_id)')
-        .or('is_active.eq.true,status.eq.pending_principal')
+        .or('is_active.eq.true,status.eq.pending_principal,status.eq.pending_company,status.eq.pending_teacher')
 
     if (contractError) throw new Error(contractError.message)
 
@@ -89,7 +90,7 @@ export async function getCompaniesWithContracts(): Promise<CompanyContractStatus
                         ? relevantContract.initiator[0]
                         : relevantContract.initiator
                 ) : undefined,
-                status: relevantContract.status as 'pending_company' | 'pending_principal' | 'active' | 'rejected',
+                status: relevantContract.status as 'pending_teacher' | 'pending_company' | 'pending_principal' | 'active' | 'rejected',
                 temp_company_name: relevantContract.temp_company_name || undefined,
                 temp_owner_name: relevantContract.temp_owner_name || undefined,
                 temp_address: relevantContract.temp_company_address || undefined,
