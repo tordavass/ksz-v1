@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+:root {
+  /* Kréta-inspired colors from Screenshot */
+  /* Light Mode (Default) */
+  --kreta-blue: #0095c6;
+  /* The distinctive Kréta Cyan-Blue */
+  --kreta-blue-light: #2db5e2;
+  --kreta-bg: #f8f9fa;
+  /* Clean, almost white background */
+  --kreta-text: #212529;
+  /* Sharp dark text */
+  --kreta-grey: #dee2e6;
+  --kreta-card-bg: #ffffff;
+  --kreta-border: #ced4da;
+
+  /* Browser optimization - Force Light Mode for Kréta Branding */
+  color-scheme: light;
+}
+
+/* 
+   Kréta is primarily a light-themed application (White Paper / Cyan Header).
+   We force these colors even if the user's system is Dark Mode to preserve branding.
+*/
+
+@theme {
+  --color-kreta-blue: var(--kreta-blue);
+  --color-kreta-blue-light: var(--kreta-blue-light);
+  --color-kreta-bg: var(--kreta-bg);
+  --color-kreta-text: var(--kreta-text);
+  --color-kreta-grey: var(--kreta-grey);
+  --color-kreta-card-bg: var(--kreta-card-bg);
+  --color-kreta-border: var(--kreta-border);
+}
+
+@layer base {
+  body {
+    background-color: var(--kreta-bg);
+    color: var(--kreta-text);
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-[var(--kreta-blue)] text-white hover:bg-[var(--kreta-blue-light)] transition-colors px-4 py-2 rounded shadow-sm font-medium cursor-pointer;
+  }
+
+  .card {
+    @apply bg-[var(--kreta-card-bg)] rounded-lg shadow-sm border border-[var(--kreta-border)];
+  }
+
+  .input-field {
+    @apply mt-1 block w-full rounded-md border border-[var(--kreta-border)] bg-[var(--kreta-card-bg)] px-3 py-2 text-[var(--kreta-text)] placeholder-gray-400 focus:border-[var(--kreta-blue)] focus:outline-none focus:ring-[var(--kreta-blue)] sm:text-sm;
+  }
+}
