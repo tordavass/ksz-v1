@@ -43,11 +43,11 @@ export type CompanyContractStatus = {
         temp_owner_name?: string
         temp_address?: string
         signer_name?: string
-        signing_token?: string
+        signing_token?: string | null
         initiator?: {
-            full_name: string
-            class_id: string
-        }
+            full_name: string | null
+            class_id: string | null
+        } | null
     } | null
 }
 
@@ -83,18 +83,22 @@ export async function getCompaniesWithContracts(): Promise<CompanyContractStatus
             name: company.name,
             address: company.address,
             contract: relevantContract ? {
-                ...relevantContract,
+                id: relevantContract.id,
+                start_date: relevantContract.start_date,
+                end_date: relevantContract.end_date,
+                file_url: relevantContract.file_url,
                 is_active: relevantContract.is_active ?? false,
-                initiator: relevantContract.initiator ? (
-                    Array.isArray(relevantContract.initiator)
-                        ? relevantContract.initiator[0]
-                        : relevantContract.initiator
-                ) : undefined,
                 status: relevantContract.status as 'pending_teacher' | 'pending_company' | 'pending_principal' | 'active' | 'rejected',
                 temp_company_name: relevantContract.temp_company_name || undefined,
                 temp_owner_name: relevantContract.temp_owner_name || undefined,
                 temp_address: relevantContract.temp_company_address || undefined,
-                signer_name: relevantContract.signer_name || undefined
+                signer_name: relevantContract.signer_name || undefined,
+                signing_token: relevantContract.signing_token,
+                initiator: relevantContract.initiator ? (
+                    Array.isArray(relevantContract.initiator)
+                        ? (relevantContract.initiator[0] as { full_name: string | null; class_id: string | null })
+                        : (relevantContract.initiator as { full_name: string | null; class_id: string | null })
+                ) : null
             } : null
         }
     })
@@ -108,22 +112,26 @@ export async function getCompaniesWithContracts(): Promise<CompanyContractStatus
         // Check if we already have this "company" in result (unlikely if company_id is null, but maybe name collision?)
         // For display, we create a fake ID or use contract ID as ID prefix
         result.unshift({
-            id: `temp-${contract.id}`, // Temporary ID for UI
-            name: contract.temp_company_name + ' (ÚJ)', // Mark as new
+            id: `temp-${contract.id}`,
+            name: contract.temp_company_name + ' (ÚJ)',
             address: contract.temp_company_address || 'Cím feldolgozás alatt...',
             contract: {
-                ...contract,
+                id: contract.id,
+                start_date: contract.start_date,
+                end_date: contract.end_date,
+                file_url: contract.file_url,
                 is_active: contract.is_active ?? false,
-                initiator: contract.initiator ? (
-                    Array.isArray(contract.initiator)
-                        ? contract.initiator[0]
-                        : contract.initiator
-                ) : undefined,
-                status: contract.status as 'pending_company' | 'pending_principal' | 'active' | 'rejected',
+                status: contract.status as 'pending_teacher' | 'pending_company' | 'pending_principal' | 'active' | 'rejected',
                 temp_company_name: contract.temp_company_name || undefined,
                 temp_owner_name: contract.temp_owner_name || undefined,
                 temp_address: contract.temp_company_address || undefined,
-                signer_name: contract.signer_name || undefined
+                signer_name: contract.signer_name || undefined,
+                signing_token: contract.signing_token,
+                initiator: contract.initiator ? (
+                    Array.isArray(contract.initiator)
+                        ? (contract.initiator[0] as { full_name: string | null; class_id: string | null })
+                        : (contract.initiator as { full_name: string | null; class_id: string | null })
+                ) : null
             }
         })
     }
