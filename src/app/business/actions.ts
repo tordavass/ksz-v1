@@ -18,7 +18,7 @@ export async function getBusinessLogs() {
 
     if (!profile || !['business_contact', 'business_owner'].includes(profile.role!) || !profile.company_id) {
         // Not a valid business user or not linked to a company
-        return { logs: [], companyName: 'Nincs cég hozzárendelve', role: profile?.role || null }
+        return { logs: [], companyName: 'Nincs cég hozzárendelve', role: profile?.role || null, unreadCount: 0 }
     }
 
     // Fetch company name for display
@@ -40,7 +40,7 @@ export async function getBusinessLogs() {
 
     if (error) {
         console.error('Error fetching business logs:', error)
-        return { logs: [], companyName: company?.name, role: profile.role }
+        return { logs: [], companyName: company?.name, role: profile.role, unreadCount: 0 }
     }
 
     // Fetch Unread Messages Count
