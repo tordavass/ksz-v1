@@ -25,7 +25,7 @@ export default async function InboxPage() {
     } else if (role === 'homeroom_teacher') {
         backLink = '/teacher'
         backText = 'Vissza a Tanári Oldalra'
-    } else if (role === 'business') {
+    } else if (role === 'business_owner' || role === 'business_contact') {
         backLink = '/business'
         backText = 'Vissza a Céges Oldalra'
     } else if (role === 'admin') {

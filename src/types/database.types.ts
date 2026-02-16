@@ -400,6 +400,7 @@ export type Database = {
       | "principal"
       | "business_owner"
       | "business_contact"
+      | "admin"
     }
     CompositeTypes: {
       [_ in never]: never
