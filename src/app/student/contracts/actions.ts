@@ -53,7 +53,7 @@ export async function submitContractRequest(formData: FormData) {
     const { error } = await supabase
         .from('contracts')
         .insert({
-            school_id: profile.school_id,
+            school_id: profile.school_id!,
             company_id: isNewCompany ? null : companyId, // Null for new companies until approved/created
             initiator_student_id: user.id,
             file_url: fileUrl,

@@ -15,7 +15,7 @@ export default async function StudentDashboard() {
             logs={logs}
             totalHours={totalHours}
             unreadCount={unreadCount}
-            inviteToken={inviteToken}
+            inviteToken={inviteToken || undefined}
         />
     )
 }

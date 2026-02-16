@@ -21,7 +21,9 @@ export async function getStudentLogs() {
 
     if (error) {
         console.error('Error fetching logs:', error)
-        return { logs: [], totalHours: 0 }
+        // Note: profile is not defined at this point if an error occurs here.
+        // So, profile?.parent_invite_token will be undefined.
+        return { logs: [], totalHours: 0, unreadCount: 0, inviteToken: undefined }
     }
 
     // Calculate total APPROVED hours

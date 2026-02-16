@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState, useState } from 'react'
+import { useActionState, useState, Suspense } from 'react'
 import { registerParent } from './actions'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
@@ -9,10 +9,12 @@ const initialState = {
     error: '',
 }
 
-export default function ParentRegisterPage() {
+function ParentRegisterContent() {
     const searchParams = useSearchParams()
     const token = searchParams.get('token')
     const [state, formAction, isPending] = useActionState(registerParent, initialState)
+    const [showPassword, setShowPassword] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
     if (!token) {
         return (
@@ -28,9 +30,6 @@ export default function ParentRegisterPage() {
             </div>
         )
     }
-
-    const [showPassword, setShowPassword] = useState(false)
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
@@ -142,5 +141,17 @@ export default function ParentRegisterPage() {
                 </form>
             </div>
         </div>
+    )
+}
+
+export default function ParentRegisterPage() {
+    return (
+        <Suspense fallback={
+            <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
+                <div className="text-[var(--kreta-blue)] animate-pulse">Betöltés...</div>
+            </div>
+        }>
+            <ParentRegisterContent />
+        </Suspense>
     )
 }

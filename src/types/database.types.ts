@@ -109,31 +109,70 @@ export type Database = {
       }
       contracts: {
         Row: {
-          company_id: string
+          company_id: string | null
           created_at: string
           end_date: string | null
+          file_url: string | null
           id: string
+          initiator_student_id: string | null
           is_active: boolean | null
+          principal_signed_at: string | null
           school_id: string
+          signer_email: string | null
+          signer_name: string | null
+          signing_token: string | null
           start_date: string
+          status: string
+          temp_company_address: string | null
+          temp_company_city: string | null
+          temp_company_email: string | null
+          temp_company_name: string | null
+          temp_owner_email: string | null
+          temp_owner_name: string | null
         }
         Insert: {
-          company_id: string
+          company_id?: string | null
           created_at?: string
           end_date?: string | null
+          file_url?: string | null
           id?: string
+          initiator_student_id?: string | null
           is_active?: boolean | null
+          principal_signed_at?: string | null
           school_id: string
+          signer_email?: string | null
+          signer_name?: string | null
+          signing_token?: string | null
           start_date: string
+          status?: string
+          temp_company_address?: string | null
+          temp_company_city?: string | null
+          temp_company_email?: string | null
+          temp_company_name?: string | null
+          temp_owner_email?: string | null
+          temp_owner_name?: string | null
         }
         Update: {
-          company_id?: string
+          company_id?: string | null
           created_at?: string
           end_date?: string | null
+          file_url?: string | null
           id?: string
+          initiator_student_id?: string | null
           is_active?: boolean | null
+          principal_signed_at?: string | null
           school_id?: string
+          signer_email?: string | null
+          signer_name?: string | null
+          signing_token?: string | null
           start_date?: string
+          status?: string
+          temp_company_address?: string | null
+          temp_company_city?: string | null
+          temp_company_email?: string | null
+          temp_company_name?: string | null
+          temp_owner_email?: string | null
+          temp_owner_name?: string | null
         }
         Relationships: [
           {
@@ -150,6 +189,13 @@ export type Database = {
             referencedRelation: "schools"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "contracts_initiator_student_id_fkey"
+            columns: ["initiator_student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
         ]
       }
       messages: {
@@ -236,6 +282,7 @@ export type Database = {
           full_name: string | null
           id: string
           is_dual_role: boolean
+          parent_invite_token: string | null
           role: Database["public"]["Enums"]["user_role"]
           school_id: string | null
           updated_at: string | null
@@ -248,6 +295,7 @@ export type Database = {
           full_name?: string | null
           id: string
           is_dual_role?: boolean
+          parent_invite_token?: string | null
           role?: Database["public"]["Enums"]["user_role"]
           school_id?: string | null
           updated_at?: string | null
@@ -260,6 +308,7 @@ export type Database = {
           full_name?: string | null
           id?: string
           is_dual_role?: boolean
+          parent_invite_token?: string | null
           role?: Database["public"]["Enums"]["user_role"]
           school_id?: string | null
           updated_at?: string | null

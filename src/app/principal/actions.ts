@@ -318,6 +318,10 @@ export async function getPrincipalStudentDetails(studentId: string) {
         redirect('/')
     }
 
+    if (!profile?.school_id) {
+        redirect('/')
+    }
+
     // 1. Fetch Student & Verify School Match
     const { data: student, error: studentError } = await supabase
         .from('profiles')

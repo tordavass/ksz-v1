@@ -48,9 +48,12 @@ export default async function GuestSigningPage({ params }: { params: Promise<{ t
     }
 
     // Determine Company Name (use registered name if exists, otherwise temp name)
-    const companyName = contract.companies?.name || contract.temp_company_name || 'Ismeretlen Cég'
-    const schoolName = contract.schools?.name || 'Ismeretlen Iskola'
-    const schoolCity = contract.schools?.city || 'Budapest'
+    const companyData = Array.isArray(contract.companies) ? contract.companies[0] : contract.companies
+    const companyName = companyData?.name || contract.temp_company_name || 'Ismeretlen Cég'
+
+    const schoolData = Array.isArray(contract.schools) ? contract.schools[0] : contract.schools
+    const schoolName = schoolData?.name || 'Ismeretlen Iskola'
+    const schoolCity = schoolData?.city || 'Budapest'
 
     return (
         <ContractForm

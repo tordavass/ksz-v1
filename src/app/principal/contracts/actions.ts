@@ -81,7 +81,20 @@ export async function getCompaniesWithContracts(): Promise<CompanyContractStatus
             id: company.id,
             name: company.name,
             address: company.address,
-            contract: relevantContract
+            contract: relevantContract ? {
+                ...relevantContract,
+                is_active: relevantContract.is_active ?? false,
+                initiator: relevantContract.initiator ? (
+                    Array.isArray(relevantContract.initiator)
+                        ? relevantContract.initiator[0]
+                        : relevantContract.initiator
+                ) : undefined,
+                status: relevantContract.status as 'pending_company' | 'pending_principal' | 'active' | 'rejected',
+                temp_company_name: relevantContract.temp_company_name || undefined,
+                temp_owner_name: relevantContract.temp_owner_name || undefined,
+                temp_address: relevantContract.temp_company_address || undefined,
+                signer_name: relevantContract.signer_name || undefined
+            } : null
         }
     })
 
@@ -97,7 +110,20 @@ export async function getCompaniesWithContracts(): Promise<CompanyContractStatus
             id: `temp-${contract.id}`, // Temporary ID for UI
             name: contract.temp_company_name + ' (ÚJ)', // Mark as new
             address: contract.temp_company_address || 'Cím feldolgozás alatt...',
-            contract: contract
+            contract: {
+                ...contract,
+                is_active: contract.is_active ?? false,
+                initiator: contract.initiator ? (
+                    Array.isArray(contract.initiator)
+                        ? contract.initiator[0]
+                        : contract.initiator
+                ) : undefined,
+                status: contract.status as 'pending_company' | 'pending_principal' | 'active' | 'rejected',
+                temp_company_name: contract.temp_company_name || undefined,
+                temp_owner_name: contract.temp_owner_name || undefined,
+                temp_address: contract.temp_company_address || undefined,
+                signer_name: contract.signer_name || undefined
+            }
         })
     }
 
@@ -123,7 +149,7 @@ export async function finalizeContract(contractId: string) {
     // 1. Fetch Contract
     const { data: contract, error: fetchError } = await supabase
         .from('contracts')
-        .select('*')
+        .select('*, companies(name)')
         .eq('id', contractId)
         .single()
 

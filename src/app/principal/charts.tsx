@@ -81,7 +81,7 @@ export function ClassPerformanceChart({ data }: { data: any[] }) {
                             fontSize: '11px'
                         }}
                         itemStyle={{ color: 'var(--kreta-blue)', fontWeight: 600 }}
-                        formatter={(value: number) => [`${value} óra`, 'Átlag']}
+                        formatter={(value: number | undefined) => [`${value || 0} óra`, 'Átlag']}
                     />
                     <Bar
                         dataKey="hours"

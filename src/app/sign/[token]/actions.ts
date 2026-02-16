@@ -126,7 +126,8 @@ export async function signContractByToken(token: string, formData: {
                 .single()
 
             if (school?.principal_id) {
-                const companyName = contract.companies?.name || contract.temp_company_name || 'Ismeretlen Cég'
+                const companyData = Array.isArray(contract.companies) ? contract.companies[0] : contract.companies
+                const companyName = companyData?.name || contract.temp_company_name || 'Ismeretlen Cég'
                 await supabase.from('messages').insert({
                     sender_id: signerUserId,
                     recipient_id: school.principal_id,

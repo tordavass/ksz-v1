@@ -18,7 +18,7 @@ export async function getTeacherClass() {
     if (classError || !classData) {
         // Not an error, some teachers might not have a class yet.
         // console.warn('Teacher has no class assigned', classError)
-        return { className: null, students: [] }
+        return { className: null, students: [], unreadCount: 0 }
     }
 
     // 2. Fetch Students in this class
@@ -31,7 +31,7 @@ export async function getTeacherClass() {
 
     if (studentError) {
         console.error('Error fetching students', studentError)
-        return { className: classData.name, students: [] }
+        return { className: classData.name, students: [], unreadCount: 0 }
     }
 
     // 3. Calculate Hours for each student
@@ -40,7 +40,7 @@ export async function getTeacherClass() {
 
     // Check if we have any students before querying logs
     if (studentIds.length === 0) {
-        return { className: classData.name, students: [] }
+        return { className: classData.name, students: [], unreadCount: 0 }
     }
 
     const { data: logs } = await supabase

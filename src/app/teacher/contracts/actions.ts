@@ -82,7 +82,9 @@ export async function approveContract(contractId: string) {
     if (error) throw new Error('Failed to approve contract')
 
     // 3. Send Email Invite
-    const inviteLink = `${process.env.NEXT_PUBLIC_APP_URL}/sign/${contract.signing_token}`
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+    const token = contract.signing_token || ''
+    const inviteLink = `${baseUrl}/sign/${token}`
 
     if (contract.temp_company_email) {
         if (process.env.RESEND_API_KEY) {
