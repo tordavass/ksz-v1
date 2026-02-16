@@ -253,6 +253,10 @@ export async function getPrincipalClassDetails(classId: string) {
         redirect('/')
     }
 
+    if (!profile?.school_id) {
+        redirect('/')
+    }
+
     // 1. Fetch Class Info & Verify it belongs to Principal's School
     const { data: classData, error: classError } = await supabase
         .from('classes')
