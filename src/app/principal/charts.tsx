@@ -10,7 +10,7 @@ const COLORS = ['#0095c6', '#E0E0E0']; // Primary Blue & Light Grey for clean du
 export function CompletionChart({ rate }: { rate: number }) {
     const data = [
         { name: 'Teljesítve', value: rate },
-        { name: 'Hátralévő', value: 100 - rate },
+        { name: 'Hátralévő', value: Math.max(0, 100 - rate) }, // Safety max
     ];
 
     return (

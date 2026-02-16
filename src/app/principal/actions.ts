@@ -153,24 +153,12 @@ export async function getSchoolStats() {
         }
     }
 
-    // 4. Calculate Completion Rate
-    let completedStudentsCount = 0
-    if (studentIds.length > 0) {
-        const { data: allApprovedLogs } = await supabase
-            .from('service_logs')
-            .select('student_id, hours_worked')
-            .in('student_id', studentIds)
-            .eq('status', 'approved')
-
-        const studentHours: Record<string, number> = {}
-        allApprovedLogs?.forEach(l => {
-            studentHours[l.student_id] = (studentHours[l.student_id] || 0) + Number(l.hours_worked)
-        })
-
-        completedStudentsCount = Object.values(studentHours).filter(h => h >= 50).length
-    }
-
-    const completionRate = totalStudents > 0 ? (completedStudentsCount / totalStudents) * 100 : 0
+    // 4. Calculate Completion Rate (Global Hours)
+    // Formula: Total Completed Hours / (Total School Capacity = Students * 50)
+    const schoolTotalCapacity = totalStudents * 50
+    const completionRate = schoolTotalCapacity > 0
+        ? Math.min((totalHours / schoolTotalCapacity) * 100, 100) // Cap at 100% just in case
+        : 0
 
     // 5. Calculate Class Leaderboard
     const { data: classes } = await supabase
