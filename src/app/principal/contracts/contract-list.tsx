@@ -144,9 +144,9 @@ export default function ContractList({ companies }: { companies: CompanyContract
 
                                             <ContractPDFViewer
                                                 studentName={company.contract.initiator?.full_name || 'Tanuló'}
-                                                studentClass={company.contract.initiator?.class_id}
+                                                studentClass={company.contract.initiator?.class_id || undefined}
                                                 companyName={company.name || company.contract.temp_company_name || 'Cég'}
-                                                companyAddress={company.address || company.contract.temp_address}
+                                                companyAddress={company.address || company.contract.temp_address || undefined}
                                                 ownerName={company.contract.signer_name || company.contract.temp_owner_name || 'Tulajdonos'}
                                                 date={company.contract.start_date}
                                                 status={company.contract.status}
