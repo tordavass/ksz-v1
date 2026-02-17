@@ -201,7 +201,8 @@ export async function finalizeContract(contractId: string) {
     // 4. Link Owner Profile to Company
     if (contract.signer_email) {
         const { data: { users } } = await adminSupabase.auth.admin.listUsers({ perPage: 1000 })
-        const ownerUser = users.find(u => u.email === contract.signer_email)
+        const signerEmail = contract.signer_email.trim().toLowerCase()
+        const ownerUser = users.find(u => u.email?.toLowerCase() === signerEmail)
 
         if (ownerUser) {
             const { error: profileError } = await adminSupabase
@@ -215,12 +216,15 @@ export async function finalizeContract(contractId: string) {
 
     // 5. [NEW] Invite Contact Person (Manager) -> Only NOW do we send the invite
     // We check if temp_owner_email (Contact Email) exists and is DIFFERENT from signer_email (Owner)
-    if (contract.temp_owner_email && contract.temp_owner_email !== contract.signer_email) {
-        const contactEmail = contract.temp_owner_email
+    const tempOwnerEmail = contract.temp_owner_email?.trim().toLowerCase()
+    const signerEmail = contract.signer_email?.trim().toLowerCase()
+
+    if (tempOwnerEmail && tempOwnerEmail !== signerEmail) {
+        const contactEmail = tempOwnerEmail
         const contactName = contract.temp_owner_name || 'Kapcsolattartó'
 
         const { data: { users } } = await adminSupabase.auth.admin.listUsers({ perPage: 1000 })
-        const existingUser = users.find(u => u.email === contactEmail)
+        const existingUser = users.find(u => u.email?.toLowerCase() === contactEmail)
 
         if (!existingUser) {
             // Generate Invite Link (Don't send email via Supabase)

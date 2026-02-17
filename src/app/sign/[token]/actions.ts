@@ -37,12 +37,12 @@ export async function signContractByToken(token: string, formData: {
 
     // Determine final contact details
     const ownerName = formData.ownerName
-    const ownerEmail = formData.ownerContact
+    const ownerEmail = formData.ownerContact.trim().toLowerCase()
     const isDualRole = formData.isDualRole || false
 
     // If dual role, force contact to be owner
     const contactName = isDualRole ? ownerName : formData.contactName
-    const contactEmail = isDualRole ? ownerEmail : formData.contactEmail
+    const contactEmail = (isDualRole ? ownerEmail : formData.contactEmail).trim().toLowerCase()
 
     // 2. Update Contract
     const { error: updateError } = await supabase
